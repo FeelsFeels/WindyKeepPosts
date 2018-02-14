@@ -5,7 +5,7 @@ public class LoadingScreen : MonoBehaviour
 {
     public static LoadingScreen Instance;
 
-    // Make sure the loading screen shows for at least 1.33 seconds:
+    // Make sure the loading screen shows for at least 1 second:
     private const float MIN_TIME_TO_SHOW = 1f;
 
     // The reference to the current loading operation running in the background:
