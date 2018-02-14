@@ -691,6 +691,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barFillRectTransform: {fileID: 390828484}
   percentLoadedText: {fileID: 979208765}
+  hideProgressBar: 1
+  hidePercentageText: 0
 --- !u!1 &1626180688
 GameObject:
   m_ObjectHideFlags: 0

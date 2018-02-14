@@ -28,6 +28,14 @@ public class LoadingScreen : MonoBehaviour
     // The elapsed time since the new scene started loading:
     private float timeElapsed;
 
+    // Set to true to hide the progress bar:
+    [SerializeField]
+    private bool hideProgressBar;
+
+    // Set to true to hide the percentage text:
+    [SerializeField]
+    private bool hidePercentageText;
+
     private void Awake()
     {
         // Singleton logic:
@@ -45,10 +53,21 @@ public class LoadingScreen : MonoBehaviour
             return;
         }
 
+        Configure();
+
+        Hide();
+    }
+
+    private void Configure()
+    {
         // Save the bar fill's initial local scale:
         barFillLocalScale = barFillRectTransform.localScale;
 
-        Hide();
+        // Enable/disable the progress bar based on configuration:
+        barFillRectTransform.transform.parent.gameObject.SetActive(!hideProgressBar);
+
+        // Enable/disable the percentage text based on configuration:
+        percentLoadedText.gameObject.SetActive(!hidePercentageText);
     }
 
     private void Update()
