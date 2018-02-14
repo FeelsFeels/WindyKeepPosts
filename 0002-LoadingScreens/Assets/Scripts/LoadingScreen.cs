@@ -5,6 +5,9 @@ public class LoadingScreen : MonoBehaviour
 {
     public static LoadingScreen Instance;
 
+    // Make sure the loading screen shows for at least 1.33 seconds:
+    private const float MIN_TIME_TO_SHOW = 1f;
+
     // The reference to the current loading operation running in the background:
     private AsyncOperation currentLoadingOperation;
 
@@ -21,6 +24,9 @@ public class LoadingScreen : MonoBehaviour
     // The text that shows how much has been loaded:
     [SerializeField]
     private Text percentLoadedText;
+
+    // The elapsed time since the new scene started loading:
+    private float timeElapsed;
 
     private void Awake()
     {
@@ -57,6 +63,18 @@ public class LoadingScreen : MonoBehaviour
             {
                 Hide();
             }
+
+            else
+            {
+                timeElapsed += Time.deltaTime;
+
+                if (timeElapsed >= MIN_TIME_TO_SHOW)
+                {
+                    // The loading screen has been showing for the minimum time required.
+                    // Allow the loading operation to formally finish:
+                    currentLoadingOperation.allowSceneActivation = true;
+                }
+            }
         }
     }
 
@@ -83,8 +101,14 @@ public class LoadingScreen : MonoBehaviour
         // Store the reference:
         currentLoadingOperation = loadingOperation;
 
+        // Stop the loading operation from finishing, even if it technically did:
+        currentLoadingOperation.allowSceneActivation = false;
+
         // Reset the UI:
         SetProgress(0f);
+
+        // Reset the time elapsed:
+        timeElapsed = 0f;
 
         isLoading = true;
     }
