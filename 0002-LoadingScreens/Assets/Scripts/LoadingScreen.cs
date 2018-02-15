@@ -36,6 +36,12 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField]
     private bool hidePercentageText;
 
+    // The animator of the loading screen:
+    private Animator animator;
+
+    // Flag whether the fade out animation was triggered.
+    private bool didTriggerFadeOutAnimation;
+
     private void Awake()
     {
         // Singleton logic:
@@ -68,6 +74,9 @@ public class LoadingScreen : MonoBehaviour
 
         // Enable/disable the percentage text based on configuration:
         percentLoadedText.gameObject.SetActive(!hidePercentageText);
+
+        // Cache the animator:
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -77,10 +86,11 @@ public class LoadingScreen : MonoBehaviour
             // Get the progress and update the UI. Goes from 0 (start) to 1 (end):
             SetProgress(currentLoadingOperation.progress);
 
-            // If the loading is complete, hide the loading screen:
-            if (currentLoadingOperation.isDone)
+            // If the loading is complete and the fade out animation has not been triggered yet, trigger it:
+            if (currentLoadingOperation.isDone && !didTriggerFadeOutAnimation)
             {
-                Hide();
+                animator.SetTrigger("Hide");
+                didTriggerFadeOutAnimation = true;
             }
 
             else
@@ -128,6 +138,12 @@ public class LoadingScreen : MonoBehaviour
 
         // Reset the time elapsed:
         timeElapsed = 0f;
+
+        // Play the fade in animation:
+        animator.SetTrigger("Show");
+
+        // Reset the fade out animation flag:
+        didTriggerFadeOutAnimation = false;
 
         isLoading = true;
     }
